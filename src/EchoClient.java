@@ -2,31 +2,34 @@
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
-    public class EchoClient {
+    public class EchoClient extends JFrame {
     
     
-    @SuppressWarnings("empty-statement")
-    public static void main(String[] args) throws IOException {
+    /*@SuppressWarnings("empty-statement")
+    public static void main(String[] args) throws IOException {*/
         /* Lanciando il programma senza argomenti si ottiene il local loopback IP address, per testarlo in locale (client e server
 sulla stessa macchina), altrimenti si possono passare da linea di comando l’indirizzo IP o il nome della macchina
 remota */
         ArrayList<String> user;
-        user = new ArrayList<>();
         String indirizzo;
-        indirizzo = "172.16.3.225";
+        public EchoClient(String str){
+        user = new ArrayList<>();
+        indirizzo = "192.168.1.25";
+        user.add(str);
         try {
 // creazione socket
             Socket socket = new Socket(indirizzo, EchoServer.PORT);
             System.out.println("EchoClient: avviato");
             System.out.println("Socket del client: " + socket);
-            System.out.print("Username: ");
-            String str;
+            //System.out.print("Username: ");
+            //String str;
             String userInput;
             
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            str = stdIn.readLine();
-            user.add(str);
+            /*str = stdIn.readLine();
+            user.add(str);*/
 // creazione stream di input da socket
             /*InputStreamReader isr = new InputStreamReader(socket.getInputStream());
             BufferedReader in = new BufferedReader(isr);*/
