@@ -2,22 +2,24 @@
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import javax.swing.JFrame;
+import javax.swing.*;
 
-    public class EchoClient extends JFrame {
-    
-    
+public class EchoClient extends JFrame {
+
     /*@SuppressWarnings("empty-statement")
     public static void main(String[] args) throws IOException {*/
-        /* Lanciando il programma senza argomenti si ottiene il local loopback IP address, per testarlo in locale (client e server
+ /* Lanciando il programma senza argomenti si ottiene il local loopback IP address, per testarlo in locale (client e server
 sulla stessa macchina), altrimenti si possono passare da linea di comando l’indirizzo IP o il nome della macchina
 remota */
-        ArrayList<String> user;
-        String indirizzo;
-        public EchoClient(String str){
+    ArrayList<String> user;
+    String indirizzo;
+    
+    public EchoClient(String str) {
+        super("Chat di " + str);
         user = new ArrayList<>();
         indirizzo = "192.168.1.25";
         user.add(str);
+            
         try {
 // creazione socket
             Socket socket = new Socket(indirizzo, EchoServer.PORT);
@@ -26,7 +28,7 @@ remota */
             //System.out.print("Username: ");
             //String str;
             String userInput;
-            
+
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             /*str = stdIn.readLine();
             user.add(str);*/
@@ -40,11 +42,13 @@ remota */
             OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter out = new PrintWriter(bw, true);
-            
+
+            out.println(str + " si è unito alla chat");
+            System.out.println("Ti sei unito alla chat");
 // creazione stream di input da tastiera
-            
+
 // ciclo di lettura da tastiera, invio al server e stampa risposta
-            while (true) {
+            /*while (true) {
                 userInput = stdIn.readLine();
                 if (userInput.equals("quit")) {
                     out.println(str + " ha abbandonato la chat ");
@@ -52,8 +56,9 @@ remota */
                     break;
                 }
                 out.println(str + ": " + userInput);
+                System.out.println(str + ": " + userInput);
                 //System.out.println("Echo: " + in.readLine());
-            }
+            }*/
 // chiudo gli oggetti stream e socket
             out.close();
             //in.close();

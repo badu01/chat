@@ -52,15 +52,18 @@ public class Runnables implements Runnable {
                     stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
                     buffer = new BufferedWriter(stringaOut);
                     out = new PrintWriter(buffer, true);
-                    out.println(str);
+                    if(!mySock.equals(listaSocket.get(i))){
+                        out.println(str);
+                    }
+                    
                 }
             }
 
             listaSocket.remove(mySock);
-            if(listaSocket.isEmpty() == true){
+            /*if(listaSocket.isEmpty() == true){
                 System.out.println("EchoServer: chiudo...");
                 System.exit(0);
-            }
+            }*/
 // chiusura di stream e socket
         } catch (IOException ex) {
             System.out.println("EchoServer: chiudo...");
