@@ -3,22 +3,100 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.awt.event.WindowEvent;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+
 /**
  *
  * @author utente
  */
 public class EchoClientGrafico extends javax.swing.JFrame {
+
+    ArrayList<String> user;
+    String indirizzo;
+    String nome;
+    OutputStreamWriter osw;
+    BufferedWriter bw;
+    PrintWriter out;
+    Socket socket;
+    Thread t1;
+
     /**
      * Creates new form EchoClientGrafico
+     *
+     * @param nome
+     * @throws java.io.IOException
      */
-    public EchoClientGrafico(String nome) {
+    public EchoClientGrafico(String nome) throws IOException {
         super("Chat di " + nome);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        show();
+        this.nome = nome;
+        user = new ArrayList<>();
+        indirizzo = "192.168.1.25";
+        user.add(nome);
         initComponents();
-    }
+        try {
+            Socket socket = new Socket(indirizzo, EchoServer.PORT);
+            this.socket = socket;
+            System.out.println("EchoClient: avviato");
+            System.out.println("Socket del client: " + socket);
+            //System.out.print("Username: ");
+            //String str;
+            String userInput;
+            //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+            /*str = stdIn.readLine();
+            user.add(str);*/
+// creazione stream di input da socket
+            /*InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+            BufferedReader in = new BufferedReader(isr);*/
+            RunnablesClient r = new RunnablesClient(socket, user, Area);
+            Thread t1 = new Thread(r);
+            this.t1 = t1;
+            t1.start();
+// creazione stream di output su socket
+            OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
+            BufferedWriter bw = new BufferedWriter(osw);
+            PrintWriter out = new PrintWriter(bw, true);
+            this.out = out;
+            out.println(nome + " si è unito alla chat");
+            //System.out.println("Ti sei unito alla chat");
+            Area.append("Ti sei unito alla chat\n");
 
+        } catch (UnknownHostException e) {
+            System.err.println("Host non riconosciuto... " + indirizzo);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Non riesco ad avere I/O per la connessione a: " + indirizzo);
+            System.exit(1);
+        }
+    }
+    /*public void windowClosing (WindowEvent e) {
+        if(JOptionPane.showConfirmDialog (null, "sei sicuro?",null,JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+            System.out.println("Window Closing");
+            this.dispose();
+        }
+    }
+    /*public void windowClosing(WindowEvent arg0) {
+             System.out.println("Window Closing");
+             System.exit(1);
+    }
+    /*public void windowClosing(WindowEvent e){
+        if(1 == e.WINDOW_CLOSED){
+            out.println(nome + " ha abbandonato la chat ");
+            out.println("quit");
+            user.remove(nome);
+            System.out.println("EchoClient: passo e chiudo...");
+        } 
+    }*/
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,72 +106,95 @@ public class EchoClientGrafico extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        Invia = new javax.swing.JButton();
+        Messaggio = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Area = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Invia");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
-        );
+        Invia.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        Invia.setText("Invia");
+        Invia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InviaActionPerformed(evt);
+            }
+        });
+
+        Messaggio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MessaggioActionPerformed(evt);
+            }
+        });
+
+        Area.setColumns(20);
+        Area.setRows(5);
+        jScrollPane1.setViewportView(Area);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Messaggio, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(Invia, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(417, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 34, Short.MAX_VALUE)))
+                    .addComponent(Invia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Messaggio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void InviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InviaActionPerformed
+        if (!Messaggio.getText().equals("")) {
+            out.println(nome + ": " + Messaggio.getText());
+            Area.append(nome + ": " + Messaggio.getText() + "\n");
+            Messaggio.setText("");
+        }
+    }//GEN-LAST:event_InviaActionPerformed
+
+    private void MessaggioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MessaggioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MessaggioActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        out.println(nome + " ha abbandonato la chat ");
+        out.println("quit");
+        user.remove(nome);
+        out.close();
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(EchoClientGrafico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        t1.stop();
+        System.out.println("EchoClient: passo e chiudo...");
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    //public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -112,17 +213,22 @@ public class EchoClientGrafico extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new EchoClientGrafico("ciao").setVisible(true);
+                try {
+                    new EchoClientGrafico("ciao").setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(EchoClientGrafico.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea Area;
+    private javax.swing.JButton Invia;
+    private javax.swing.JTextField Messaggio;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

@@ -58,12 +58,11 @@ public class Runnables implements Runnable {
                     
                 }
             }
-
             listaSocket.remove(mySock);
-            /*if(listaSocket.isEmpty() == true){
+            if(listaSocket.isEmpty() == true){
                 System.out.println("EchoServer: chiudo...");
                 System.exit(0);
-            }*/
+            }
 // chiusura di stream e socket
         } catch (IOException ex) {
             System.out.println("EchoServer: chiudo...");

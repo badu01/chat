@@ -17,7 +17,7 @@ remota */
     public EchoClient(String str) {
         super("Chat di " + str);
         user = new ArrayList<>();
-        indirizzo = "192.168.1.25";
+        indirizzo = "172.16.3.225";
         user.add(str);
             
         try {
@@ -35,9 +35,9 @@ remota */
 // creazione stream di input da socket
             /*InputStreamReader isr = new InputStreamReader(socket.getInputStream());
             BufferedReader in = new BufferedReader(isr);*/
-            RunnablesClient r = new RunnablesClient(socket, user);
+            /*RunnablesClient r = new RunnablesClient(socket, user);
             Thread t1 = new Thread(r);
-            t1.start();
+            t1.start();*/
 // creazione stream di output su socket
             OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
             BufferedWriter bw = new BufferedWriter(osw);
@@ -48,7 +48,7 @@ remota */
 // creazione stream di input da tastiera
 
 // ciclo di lettura da tastiera, invio al server e stampa risposta
-            /*while (true) {
+            while (true) {
                 userInput = stdIn.readLine();
                 if (userInput.equals("quit")) {
                     out.println(str + " ha abbandonato la chat ");
@@ -58,13 +58,13 @@ remota */
                 out.println(str + ": " + userInput);
                 System.out.println(str + ": " + userInput);
                 //System.out.println("Echo: " + in.readLine());
-            }*/
+            }
 // chiudo gli oggetti stream e socket
             out.close();
             //in.close();
             stdIn.close();
             socket.close();
-            t1.stop();
+            //t1.stop();
             user.remove(str);
 
         } catch (UnknownHostException e) {
