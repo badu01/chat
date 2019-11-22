@@ -40,7 +40,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
         show();
         this.nome = nome;
         user = new ArrayList<>();
-        indirizzo = "192.168.1.25";
+        indirizzo = "172.16.3.225";
         user.add(nome);
         initComponents();
         try {
@@ -66,9 +66,9 @@ public class EchoClientGrafico extends javax.swing.JFrame {
             BufferedWriter bw = new BufferedWriter(osw);
             PrintWriter out = new PrintWriter(bw, true);
             this.out = out;
-            out.println(nome + " si è unito alla chat");
+            out.println("                                        " + nome + " si è unito alla chat");
             //System.out.println("Ti sei unito alla chat");
-            Area.append("Ti sei unito alla chat\n");
+            Area.append("                                        Ti sei unito alla chat\n");
 
         } catch (UnknownHostException e) {
             System.err.println("Host non riconosciuto... " + indirizzo);
@@ -78,25 +78,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
             System.exit(1);
         }
     }
-    /*public void windowClosing (WindowEvent e) {
-        if(JOptionPane.showConfirmDialog (null, "sei sicuro?",null,JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-            System.out.println("Window Closing");
-            this.dispose();
-        }
-    }
-    /*public void windowClosing(WindowEvent arg0) {
-             System.out.println("Window Closing");
-             System.exit(1);
-    }
-    /*public void windowClosing(WindowEvent e){
-        if(1 == e.WINDOW_CLOSED){
-            out.println(nome + " ha abbandonato la chat ");
-            out.println("quit");
-            user.remove(nome);
-            System.out.println("EchoClient: passo e chiudo...");
-        } 
-    }*/
-  
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,6 +94,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
         Area = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -132,6 +115,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
             }
         });
 
+        Area.setEditable(false);
         Area.setColumns(20);
         Area.setRows(5);
         jScrollPane1.setViewportView(Area);
@@ -144,7 +128,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
                 .addComponent(Messaggio, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Invia, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +156,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
     }//GEN-LAST:event_MessaggioActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        out.println(nome + " ha abbandonato la chat ");
+        out.println("                                        " + nome + " ha abbandonato la chat ");
         out.println("quit");
         user.remove(nome);
         out.close();
