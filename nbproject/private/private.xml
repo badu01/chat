@@ -5,10 +5,9 @@
         <group>
             <file>file:/J:/chat/src/RunnablesClient.java</file>
             <file>file:/J:/chat/src/EchoServer.java</file>
-            <file>file:/J:/chat/src/EchoClient.java</file>
             <file>file:/J:/chat/src/Runnables.java</file>
-            <file>file:/J:/chat/src/EchoClientGrafico.java</file>
             <file>file:/J:/chat/src/Login.java</file>
+            <file>file:/J:/chat/src/EchoClientGrafico.java</file>
         </group>
     </open-files>
 </project-private>

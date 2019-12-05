@@ -13,13 +13,29 @@ public class EchoServer {
         System.out.println("EchoServer: avviato ");
         System.out.println("Socket del server: " + serverSocket);
         ArrayList<Socket> listaSocket = new ArrayList<>();
+        ArrayList<String> user = new ArrayList<>();
         
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept(); // in attesa finchè non avviene una connessione
                 System.out.println("EchoServer: connesso: " + clientSocket);
                 listaSocket.add(clientSocket);
-                Runnables r = new Runnables(listaSocket, clientSocket);
+                
+                InputStreamReader stringaIn = new InputStreamReader(clientSocket.getInputStream());
+                BufferedReader in = new BufferedReader(stringaIn);
+                String nome = in.readLine();
+                user.add(nome);
+                System.out.println(user.size());
+                
+                OutputStreamWriter stringaOut = new OutputStreamWriter(clientSocket.getOutputStream());
+                BufferedWriter buffer = new BufferedWriter(stringaOut);
+                PrintWriter out = new PrintWriter(buffer, true);
+                for(int i = 0; i < user.size(); i++){
+                    out.println(user.get(i));
+                }
+                out.println("finish");
+                
+                Runnables r = new Runnables(listaSocket, clientSocket, user, nome);
                 Thread t1 = new Thread(r);
                 t1.start();
 

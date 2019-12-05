@@ -22,11 +22,15 @@ import java.util.logging.Logger;
 public class Runnables implements Runnable {
 
     ArrayList<Socket> listaSocket = new ArrayList<>();
+    ArrayList<String> user = new ArrayList<>();
+    String nome = "";
     Socket mySock;
 
-    Runnables(ArrayList<Socket> listaSocket, Socket clientSocket) {
+    Runnables(ArrayList<Socket> listaSocket, Socket clientSocket, ArrayList<String> user, String nome) {
         this.listaSocket = listaSocket;
         this.mySock = clientSocket;
+        this.user = user;
+        this.nome = nome;
     }
 
     @Override
@@ -59,10 +63,8 @@ public class Runnables implements Runnable {
                 }
             }
             listaSocket.remove(mySock);
-            if(listaSocket.isEmpty() == true){
-                System.out.println("EchoServer: chiudo...");
-                System.exit(0);
-            }
+            user.remove(nome);
+                       
 // chiusura di stream e socket
         } catch (IOException ex) {
             System.out.println("EchoServer: chiudo...");

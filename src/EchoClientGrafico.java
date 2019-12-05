@@ -41,15 +41,37 @@ public class EchoClientGrafico extends javax.swing.JFrame {
         this.nome = nome;
         user = new ArrayList<>();
         indirizzo = "172.16.3.225";
-        user.add(nome);
+        //user.add(nome);
         initComponents();
         try {
             Socket socket = new Socket(indirizzo, EchoServer.PORT);
             this.socket = socket;
             System.out.println("EchoClient: avviato");
             System.out.println("Socket del client: " + socket);
+            
+            
+            
+            OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
+            BufferedWriter bw = new BufferedWriter(osw);
+            PrintWriter out = new PrintWriter(bw, true);
+            this.out = out;
+            out.println(nome);
             //System.out.print("Username: ");
             //String str;
+            InputStreamReader stringaIn = new InputStreamReader(socket.getInputStream());
+            BufferedReader in = new BufferedReader(stringaIn);
+            /*do{
+                user.add(in.readLine());
+            }while(in.readLine() == "finish");*/
+            while(true){
+                if(in.equals("finish"))break;
+                user.add(in.readLine());
+                System.out.println("PROVA");
+
+            }    
+            
+            System.out.println(user.size());
+            
             String userInput;
             //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
             /*str = stdIn.readLine();
@@ -62,10 +84,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
             this.t1 = t1;
             t1.start();
 // creazione stream di output su socket
-            OutputStreamWriter osw = new OutputStreamWriter(socket.getOutputStream());
-            BufferedWriter bw = new BufferedWriter(osw);
-            PrintWriter out = new PrintWriter(bw, true);
-            this.out = out;
+            
             out.println("                                        " + nome + " si è unito alla chat");
             //System.out.println("Ti sei unito alla chat");
             Area.append("                                        Ti sei unito alla chat\n");
@@ -144,7 +163,20 @@ public class EchoClientGrafico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void InviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InviaActionPerformed
-        if (!Messaggio.getText().equals("")) {
+        int cont = 0;
+        for(int i = 0; i < user.size(); i++){
+            if(Messaggio.getText().equals("/" + user.get(i))){
+                
+            }
+        }
+        if(Messaggio.getText().equals("/lista")){
+            for(int i = 0; i < user.size(); i++){
+                Area.append(user.get(i) + "\n");
+                System.out.println(user.size());
+                cont++;
+            }
+        }
+        else if (!Messaggio.getText().equals("") && cont == 0) {
             out.println(nome + ": " + Messaggio.getText());
             Area.append(nome + ": " + Messaggio.getText() + "\n");
             Messaggio.setText("");
