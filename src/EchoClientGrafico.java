@@ -62,15 +62,9 @@ public class EchoClientGrafico extends javax.swing.JFrame {
             BufferedReader in = new BufferedReader(stringaIn);
             /*do{
                 user.add(in.readLine());
-            }while(in.readLine() == "finish");*/
-            while(true){
-                if(in.equals("finish"))break;
-                user.add(in.readLine());
                 System.out.println("PROVA");
-
-            }    
-            
-            System.out.println(user.size());
+            }while(in.readLine() == "finish");*/
+                       
             
             String userInput;
             //BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
@@ -163,7 +157,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void InviaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InviaActionPerformed
-        int cont = 0;
+        /*int cont = 0;
         for(int i = 0; i < user.size(); i++){
             if(Messaggio.getText().equals("/" + user.get(i))){
                 
@@ -175,10 +169,10 @@ public class EchoClientGrafico extends javax.swing.JFrame {
                 System.out.println(user.size());
                 cont++;
             }
-        }
-        else if (!Messaggio.getText().equals("") && cont == 0) {
+        }*/
+        if (!Messaggio.getText().equals("")) {
             out.println(nome + ": " + Messaggio.getText());
-            Area.append(nome + ": " + Messaggio.getText() + "\n");
+            //Area.append(nome + ": " + Messaggio.getText() + "\n");
             Messaggio.setText("");
         }
     }//GEN-LAST:event_InviaActionPerformed
@@ -189,7 +183,7 @@ public class EchoClientGrafico extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         out.println("                                        " + nome + " ha abbandonato la chat ");
-        out.println("quit");
+        //out.println("quit");
         user.remove(nome);
         out.close();
         try {

@@ -25,15 +25,15 @@ public class EchoServer {
                 BufferedReader in = new BufferedReader(stringaIn);
                 String nome = in.readLine();
                 user.add(nome);
-                System.out.println(user.size());
+                //System.out.println(user.size());
                 
-                OutputStreamWriter stringaOut = new OutputStreamWriter(clientSocket.getOutputStream());
+                /*OutputStreamWriter stringaOut = new OutputStreamWriter(clientSocket.getOutputStream());
                 BufferedWriter buffer = new BufferedWriter(stringaOut);
                 PrintWriter out = new PrintWriter(buffer, true);
                 for(int i = 0; i < user.size(); i++){
                     out.println(user.get(i));
                 }
-                out.println("finish");
+                out.println("finish");*/
                 
                 Runnables r = new Runnables(listaSocket, clientSocket, user, nome);
                 Thread t1 = new Thread(r);

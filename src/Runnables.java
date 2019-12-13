@@ -44,26 +44,44 @@ public class Runnables implements Runnable {
         try {
             stringaIn = new InputStreamReader(mySock.getInputStream());
             BufferedReader in = new BufferedReader(stringaIn);
+            int cont = 0;
+            for(int i = 0; i < listaSocket.size(); i++){
+                if (mySock.equals(listaSocket.get(i)))cont = i;
+            }
 // ciclo di ricezione dal client e invio di risposta
             while (true) {
                 String str = in.readLine();
-                if (str.equals("quit")) {
+                if (str.equals("                                        " + user.get(cont) + " ha abbandonato la chat ")) {
+                    listaSocket.remove(mySock);
+                    user.remove(nome);
                     System.out.println("Chiudo la connesione con: " + mySock);
                     break;
                 }
-                //System.out.println("Ripeto il messaggio ricevuto da: " + mySock + " " + str);
-                for (int i = 0; i < listaSocket.size(); i++) {
-                    stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
-                    buffer = new BufferedWriter(stringaOut);
-                    out = new PrintWriter(buffer, true);
-                    if(!mySock.equals(listaSocket.get(i))){
-                        out.println(str);
+                else if (str.equals(user.get(cont) + ": /lista")){
+                    for (int i =0; i < user.size(); i++){
+                        stringaOut = new OutputStreamWriter(mySock.getOutputStream());
+                        buffer = new BufferedWriter(stringaOut);
+                        out = new PrintWriter(buffer, true);
+                        out.println(i+1 + ")"+user.get(i));
                     }
-                    
+                }else if(str.equals("                                        " + user.get(cont) + " si è unito alla chat")){
+                    for (int i = 0; i < listaSocket.size(); i++) {
+                        stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
+                        buffer = new BufferedWriter(stringaOut);
+                        out = new PrintWriter(buffer, true);
+                        if(!mySock.equals(listaSocket.get(i)))out.println(str);
+                    }
+                }else{
+                    for (int i = 0; i < listaSocket.size(); i++) {
+                        stringaOut = new OutputStreamWriter(listaSocket.get(i).getOutputStream());
+                        buffer = new BufferedWriter(stringaOut);
+                        out = new PrintWriter(buffer, true);
+                        out.println(str);
+                    }   
                 }
             }
-            listaSocket.remove(mySock);
-            user.remove(nome);
+            //listaSocket.remove(mySock);
+            //user.remove(nome);
                        
 // chiusura di stream e socket
         } catch (IOException ex) {
