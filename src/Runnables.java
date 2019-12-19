@@ -53,7 +53,15 @@ public class Runnables implements Runnable {
             while (true) {
                 int a = 0;
                 String str = in.readLine();
-                System.out.println(temp);
+                if(temp != -1){
+                    if(str.equals(("                                        " + user.get(temp) + " ha abbandonato la chat "))){
+                        stringaOut = new OutputStreamWriter(mySock.getOutputStream());
+                        buffer = new BufferedWriter(stringaOut);
+                        out = new PrintWriter(buffer, true);
+                        out.println("                                        Sei tornato alla chat di gruppo");
+                        temp = -1;
+                    }
+                }
                 for(int i = 0; i < user.size(); i++){
                     if (str.equals(user.get(cont) + ": /" + user.get(i))){
                         stringaOut = new OutputStreamWriter(mySock.getOutputStream());
@@ -70,6 +78,7 @@ public class Runnables implements Runnable {
                     out = new PrintWriter(buffer, true);
                     out.println("                                        Sei tornato alla chat di gruppo");
                     temp = -1;
+                    a = 1;
                 }
                 if (str.equals("                                        " + user.get(cont) + " ha abbandonato la chat ")) {
                     for (int i = 0; i < listaSocket.size(); i++) {
@@ -101,6 +110,10 @@ public class Runnables implements Runnable {
                     stringaOut = new OutputStreamWriter(listaSocket.get(temp).getOutputStream());
                     buffer = new BufferedWriter(stringaOut);
                     out = new PrintWriter(buffer, true);
+                    out.println("[MESSAGGIO PRIVATO da: " + str + "]");
+                    stringaOut = new OutputStreamWriter(mySock.getOutputStream());
+                    buffer = new BufferedWriter(stringaOut);
+                    out = new PrintWriter(buffer, true);
                     out.println(str);
                 }else if(temp == -1 && a == 0){
                     for (int i = 0; i < listaSocket.size(); i++) {
@@ -110,6 +123,8 @@ public class Runnables implements Runnable {
                         out.println(str);
                     }   
                 }
+                System.out.println(str);
+                System.out.println(temp);
             }
             //listaSocket.remove(mySock);
             //user.remove(nome);
